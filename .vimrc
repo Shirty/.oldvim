@@ -25,7 +25,9 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'fugitive.vim'
 Bundle 'scrooloose/nerdtree'
-" Bundle 'Valloric/YouCompleteMe' " FIXME Brings up changed URI and error at start up
+" Bundle 'Valloric/YouCompleteMe'
+" If using YouCompleteMe and eclim:
+"   let g:EclimCompletionMethod = 'omnifunc'
 Bundle 'majutsushi/tagbar'
 Bundle 'othree/javascript-libraries-syntax.vim'
 Bundle 'groenewege/vim-less'
@@ -37,6 +39,10 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'mileszs/ack.vim.git'
 Bundle 'klen/python-mode'
 Bundle 'Raimondi/delimitMate'
+" Incase YouCompleteMe does not work with eclim
+Bundle 'ervandew/supertab' 
+let g:SuperTabDefaultCompletionType = 'context'
+
 " Bundle 'Townk/vim-autoclose' " FIXME Issue with indenting
 " Plugin 'sontek/rope-vim.git' FIXME Issue with installing asks for password ALSO Included in python-mode
 " Bundle 'ervandew/supertab' " FIXME Doesn't work like in tutorial
@@ -85,6 +91,26 @@ else
   set dir-=.
 endif
 
+" Handle issue with mate-terminal and using ctrl
+let c='a'
+while c <= 'z'
+  exec "set <A-".c.">=\e".c
+  exec "imap \e".c." <A-".c.">"
+  let c = nr2char(1+char2nr(c))
+endw
+
+" For numbers also
+let c='0'
+while c <= '9'
+  exec "set <A-".c.">=\e".c
+  exec "imap \e".c." <A-".c.">"
+  let c = nr2char(1+char2nr(c))
+endw
+
+
+" TODO lookup ttimeout if timeout bad
+set timeout ttimeoutlen=50
+
 " Windows specifics-----------------------{{{
 " ----------------------------------------
 if has("win32")
@@ -114,6 +140,7 @@ if has("win32")
 else
     colorscheme grb3
     colorscheme moria
+    colorscheme grb256
 endif
 
 if has("win32")
@@ -160,7 +187,7 @@ python << endpython
 
 import vim
 
-list_of_colors = ["grb3", "moria", "pyte", "habiLight"]
+list_of_colors = ["grb3", "moria", "grb256"]
 list_of_darkbefores = ["moria"]
 
 index = int(vim.eval("g:MY_COLORSCHEME_INDEX"))
@@ -173,7 +200,6 @@ if list_of_colors[index] in list_of_darkbefores:
 
 vim.command("colorscheme " + list_of_colors[index])
 
-
 vim.command("let g:MY_COLORSCHEME_INDEX=" + str(index))
 
 endpython
@@ -183,7 +209,7 @@ endfunction
 nnoremap <leader>é :call ChangeColorscheme()<cr>
 " }}}
 
-" NOP-------------------------------------{{{
+" NOP Window changing---------------------{{{
 nnoremap <c-w>h <nop>
 nnoremap <c-w>j <nop>
 nnoremap <c-w>k <nop>
@@ -220,14 +246,16 @@ nnoremap <leader>rb :e! "%"<cr>:execute ":cd "."%:p:h"<cr>:pwd<cr>
 nnoremap <leader>$$ :redraw!<cr>
 " }}}
 " Folding---------------------------------{{{
-nnoremap <m-l> ]z
-nnoremap <m-L> za
-nnoremap <m-h> [z
-nnoremap <m-H> zM
+" Up/Down
 nnoremap <m-j> zj
 nnoremap <m-k> zk
-nnoremap <m-J> zo
-nnoremap <m-K> zc
+" Open/Close
+nnoremap <m-l> za
+" nnoremap <m-l> ]z
+" nnoremap <m-L> za
+" nnoremap <m-H> zM
+" nnoremap <m-J> zo
+" nnoremap <m-K> zc
 " }}}
 " Quit and Save---------------------------{{{
 nnoremap <leader>q :q<cr>
@@ -268,6 +296,9 @@ augroup FileType_Python
     au!
     " Setting Tab making
     au FileType python setlocal tabstop=8 expandtab shiftwidth=4 softtabstop=4 
+    " Folding
+    au filetype python setlocal foldlevel=20
+    au filetype python setlocal foldlevel=20
     " Launch python from within vim TODO As above need cross platform
     " au FileType python nnoremap <buffer> <localleader>y :exec "!xfce4-terminal 
     "             \-x python3 -i -m" "%:r" "&"<cr><cr>
@@ -278,8 +309,8 @@ augroup FileType_Python
     au FileType python nnoremap <buffer> <localleader>c I#<esc>
     au FileType python vnoremap <buffer> <localleader>c <c-v>I#<esc>
     " EOL Commenting
-    au FileType python inoremap <buffer> <m-c> <esc>A # 
-    au FileType python nnoremap <buffer> <m-c> A # 
+    " au FileType python inoremap <buffer> <C-c> <esc>A # 
+    " au FileType python nnoremap <buffer> <C-c> A # 
     au FileType python let g:pyindent_continue = 'shiftwidth()'
     " What is this FIXME ^
 augroup END
@@ -302,6 +333,10 @@ augroup FileType_C_CPP
     au filetype c setlocal foldmethod=syntax
     au filetype cpp setlocal foldnestmax=1
     au filetype c setlocal foldnestmax=1
+    " I prefer seeing the whole file first, also for snippets its better because if no foldlevel given when adding code
+    " with snippets some of it is ofuscated
+    au filetype cpp setlocal foldlevel=20
+    au filetype c setlocal foldlevel=20
 
     " FIXME Snippet?
     " au filetype c iabbrev Cmain int main(int argc, char *argv[])<cr>{<cr><cr>return EXIT_SUCCESS;<cr>}<esc>%
@@ -312,8 +347,8 @@ augroup FileType_C_CPP
     au filetype c vnoremap <buffer> <localleader>c <c-v>I//<esc>
     au filetype c vnoremap <buffer> <localleader>C <c-v>lx
     " EOL Commenting
-    au filetype c inoremap <buffer> <m-c> <esc>A /**/<esc>hi
-    au filetype c nnoremap <buffer> <m-c> A /**/<esc>hi
+    " au filetype c inoremap <buffer> <C-c> <esc>A /**/<esc>hi
+    " au filetype c nnoremap <buffer> <C-c> A /**/<esc>hi
     au filetype c nnoremap <buffer> Uc //<esc>vnd
     " Navigation
     au filetype cpp nnoremap <buffer> <localleader>h :e %<.h<cr>
@@ -382,7 +417,7 @@ augroup FileType_VimScript
     " Commenting------------------------------
     au FileType vim nnoremap <buffer> <localleader>c O" <esc>40A-<esc>^llR
     "^topcomment
-    au FileType vim nnoremap <buffer> <m-c> A "
+    " au FileType vim nnoremap <buffer> <C-c> A "
     "^EOL comment
     " Folding---------------------------------
     au FileType vim vnoremap <buffer> <localleader>c "aygvdOO" 
