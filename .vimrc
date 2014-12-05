@@ -25,7 +25,10 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 Bundle 'fugitive.vim'
 Bundle 'scrooloose/nerdtree'
-" Bundle 'Valloric/YouCompleteMe'
+if has('unix')
+  let g:UsingYouCompleteMe=1
+  Bundle 'Valloric/YouCompleteMe'
+endif
 " If using YouCompleteMe and eclim:
 "   let g:EclimCompletionMethod = 'omnifunc'
 Bundle 'majutsushi/tagbar'
@@ -42,6 +45,7 @@ Bundle 'Raimondi/delimitMate'
 " Incase YouCompleteMe does not work with eclim
 Bundle 'ervandew/supertab' 
 let g:SuperTabDefaultCompletionType = 'context'
+Bundle  'altercation/vim-colors-solarized.git'
 
 " Bundle 'Townk/vim-autoclose' " FIXME Issue with indenting
 " Plugin 'sontek/rope-vim.git' FIXME Issue with installing asks for password ALSO Included in python-mode
@@ -124,6 +128,8 @@ endif
 " -m = no menu bar, -T = no toolbar, gfn = GUIFONT
 set guioptions-=m
 set guioptions-=T
+set guioptions-=r
+set guioptions-=L
 if has("win32")
     set gfn=Consolas:h10:cANSI
 else
@@ -139,8 +145,8 @@ if has("win32")
     colorscheme moria
 else
     colorscheme grb3
-    colorscheme moria
     colorscheme grb256
+    colorscheme moria
 endif
 
 if has("win32")
@@ -187,7 +193,7 @@ python << endpython
 
 import vim
 
-list_of_colors = ["grb3", "moria", "grb256"]
+list_of_colors = ["moria", "grb3", "grb256"]
 list_of_darkbefores = ["moria"]
 
 index = int(vim.eval("g:MY_COLORSCHEME_INDEX"))
