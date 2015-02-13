@@ -21,7 +21,7 @@ endif
 call vundle#rc()
 
 " git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle " Command for getting vundle
-" Let Vundle manage Vundle "--- Required!
+" Let Vundle manage Vundle " --- Required!
 Bundle 'gmarik/vundle'
 Bundle 'fugitive.vim'
 Bundle 'scrooloose/nerdtree'
@@ -29,24 +29,24 @@ if has('unix')
   let g:UsingYouCompleteMe=1
   Bundle 'Valloric/YouCompleteMe'
 endif
+" TODO: Needs to go down in java
 " If using YouCompleteMe and eclim:
 "   let g:EclimCompletionMethod = 'omnifunc'
 Bundle 'majutsushi/tagbar'
 Bundle 'othree/javascript-libraries-syntax.vim'
 Bundle 'groenewege/vim-less'
 Bundle 'octol/vim-cpp-enhanced-highlight'
-Bundle 'msanders/snipmate.vim'
 Bundle 'vim-scripts/TaskList.vim'
 Bundle 'sjl/gundo.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'mileszs/ack.vim.git'
 Bundle 'klen/python-mode'
 Bundle 'Raimondi/delimitMate'
-" Incase YouCompleteMe does not work with eclim
-Bundle 'ervandew/supertab' 
-let g:SuperTabDefaultCompletionType = 'context'
+Bundle 'SirVer/ultisnips'
+Bundle 'honza/vim-snippets'
 Bundle  'altercation/vim-colors-solarized.git'
 
+" Bundle 'msanders/snipmate.vim' " FIXME  Doesn't work properly with YouCompleteMe
 " Bundle 'Townk/vim-autoclose' " FIXME Issue with indenting
 " Plugin 'sontek/rope-vim.git' FIXME Issue with installing asks for password ALSO Included in python-mode
 " Bundle 'ervandew/supertab' " FIXME Doesn't work like in tutorial
@@ -79,6 +79,9 @@ set tabstop=2
 set expandtab
 set shiftwidth=2
 set softtabstop=2
+
+" Folding
+set foldcolumn=1
 
 " Use mouse
 set mouse=a
@@ -497,6 +500,11 @@ endif
 " YouCompleteMe---------------------------{{{ nnoremap <F3> :TlistToggle<CR>
 let g:ycm_global_ycm_extra_conf = '~/.ycm_global_ycm_extra_conf'
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<cr>
+" }}}
+" UltiSnips-------------------------------{{{
+let g:UltiSnipsExpandTrigger="<c-a>"
+let g:UltiSnipsJumpForwardTrigger="<c-l>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 " }}}
 " Tagbar----------------------------------{{{
 nnoremap <F4> :TagbarToggle<CR>
