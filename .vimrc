@@ -13,38 +13,43 @@ filetype off
 " ----------------------------------------
 
 if has("win32") " Different place depending on system
-    set rtp+=$HOME/vimfiles/bundle/Vundle.vim
+  set rtp+=~/vimfiles/bundle/vundle/
+	let path='~/vimfiles/bundle'
+	call vundle#begin(path)
 else
-    set rtp+=~/.vim/bundle/vundle/
+  set rtp+=~/.vim/bundle/vundle/
+	call vundle#begin()
 endif
-
-call vundle#rc()
 
 " git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle " Command for getting vundle
 " Let Vundle manage Vundle " --- Required!
-Bundle 'gmarik/vundle'
-Bundle 'fugitive.vim'
-Bundle 'scrooloose/nerdtree'
+Plugin 'gmarik/vundle'
+Plugin 'fugitive.vim'
+Plugin 'scrooloose/nerdtree'
 if has('unix')
   let g:UsingYouCompleteMe=1
-  Bundle 'Valloric/YouCompleteMe'
+  Plugin 'Valloric/YouCompleteMe'
 endif
 " TODO: Needs to go down in java
 " If using YouCompleteMe and eclim:
 "   let g:EclimCompletionMethod = 'omnifunc'
-Bundle 'majutsushi/tagbar'
-Bundle 'othree/javascript-libraries-syntax.vim'
-Bundle 'groenewege/vim-less'
-Bundle 'octol/vim-cpp-enhanced-highlight'
-Bundle 'vim-scripts/TaskList.vim'
-Bundle 'sjl/gundo.vim'
-Bundle 'kien/ctrlp.vim'
-Bundle 'mileszs/ack.vim.git'
-Bundle 'klen/python-mode'
-Bundle 'Raimondi/delimitMate'
-Bundle 'SirVer/ultisnips'
-Bundle 'honza/vim-snippets'
-Bundle  'altercation/vim-colors-solarized.git'
+Plugin 'majutsushi/tagbar'
+Plugin 'othree/javascript-libraries-syntax.vim'
+Plugin 'groenewege/vim-less'
+Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'vim-scripts/TaskList.vim'
+Plugin 'sjl/gundo.vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'mileszs/ack.vim.git'
+Plugin 'klen/python-mode'
+Plugin 'Raimondi/delimitMate'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin  'altercation/vim-colors-solarized.git'
+" Haxe plugin
+Plugin 'jdonaldson/vaxe'
+
+call vundle#end()
 
 " Bundle 'msanders/snipmate.vim' " FIXME  Doesn't work properly with YouCompleteMe
 " Bundle 'Townk/vim-autoclose' " FIXME Issue with indenting
