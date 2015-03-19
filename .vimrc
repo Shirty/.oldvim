@@ -41,7 +41,7 @@ Plugin 'vim-scripts/TaskList.vim'
 Plugin 'sjl/gundo.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'mileszs/ack.vim.git'
-Plugin 'klen/python-mode'
+" Plugin 'klen/python-mode' " Have an issue with big slowdowns pythong mode
 Plugin 'Raimondi/delimitMate'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
@@ -463,6 +463,14 @@ augroup FileType_Html
     au!
     au FileType html setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2 
 augroup END
+" }}}
+" PHP Filetype Settings -----------------{{{
+augroup FileType_Php
+    au!
+    au FileType php set encoding=utf-8
+    au FileType php set fileencoding=utf-8
+    " au FileType html setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2 
+augroup Php
 " }}}
 " Javascript Filetype Settings------------{{{
 augroup FileType_Javascript
